@@ -1,0 +1,59 @@
+.layout {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  transition: background-color var(--transition-normal);
+  padding-top: 4rem; // ensure content starts below fixed navbar
+
+  &__content {
+    display: flex;
+    min-height: calc(100vh - 4rem); // Account for navbar height
+  }
+}
+
+.main {
+  flex: 1;
+  margin-left: 16rem; // Default sidebar width
+  transition: margin-left var(--transition-normal);
+  min-height: calc(100vh - 4rem);
+  background: var(--bg-primary);
+
+  &__collapsed {
+    margin-left: 4rem; // Collapsed sidebar width
+  }
+
+  &__noSidebar {
+    margin-left: 0; // Landing page has no sidebar
+    
+    .main__container {
+      padding-top: 0; // remove extra space below fixed navbar on landing hero
+    }
+  }
+
+  &__container {
+    width: 100%;
+    max-width: 100%;
+    padding: var(--space-6);
+    margin: 0 auto;
+
+    @media (min-width: 640px) {
+      padding: var(--space-8);
+    }
+
+    @media (min-width: 1024px) {
+      padding: var(--space-10);
+    }
+
+    @media (min-width: 1280px) {
+      padding: var(--space-12);
+    }
+  }
+
+  // Mobile styles
+  @media (max-width: 1024px) {
+    margin-left: 0;
+    
+    &__collapsed {
+      margin-left: 0;
+    }
+  }
+}

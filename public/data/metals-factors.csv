@@ -1,0 +1,8 @@
+material,process,co2e_kg_per_kg,energy_mj_per_kg,water_l_per_kg
+Aluminium,Primary,16.5,180,60
+Aluminium,Secondary,0.9,15,10
+Steel,Primary,2.1,25,5
+Steel,Secondary,0.6,8,3
+Copper,Primary,4.0,45,25
+Copper,Secondary,1.2,12,8
+

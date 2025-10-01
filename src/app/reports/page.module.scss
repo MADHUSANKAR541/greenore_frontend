@@ -1,0 +1,47 @@
+.page {
+  width: 100%;
+  min-height: calc(100vh - 4rem);
+  background: var(--bg-primary);
+  transition: background-color var(--transition-normal);
+}
+
+.content {
+  padding: var(--space-8);
+  max-width: 6xl;
+  margin: 0 auto;
+
+  h1 {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-4) 0;
+  }
+
+  p {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+.actions { margin: var(--space-6) 0; display: flex; gap: var(--space-3); }
+.search { display: flex; gap: 8px; align-items: center; border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: 8px 10px; background: var(--bg-card); }
+.search input { border: none; outline: none; background: transparent; color: var(--text-primary); width: 240px; }
+
+.list { display: grid; gap: var(--space-3); margin-top: var(--space-4); }
+.item { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-lg); padding: var(--space-4); }
+.itemMain { display: flex; gap: var(--space-3); align-items: center; }
+.icon { width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; background: var(--hover-bg); color: var(--text-secondary); }
+.title { font-weight: 700; margin-bottom: 4px; }
+.meta { font-size: var(--text-sm); color: var(--text-tertiary); }
+.itemActions { display: flex; align-items: center; gap: var(--space-2); }
+.badge { padding: 4px 8px; border-radius: 999px; background: rgba(16,185,129,0.15); color: var(--brand-primary); font-size: var(--text-sm); }
+.badgeMuted { padding: 4px 8px; border-radius: 999px; background: var(--hover-bg); color: var(--text-secondary); font-size: var(--text-sm); }
+.download { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: var(--radius-md); border: 1px solid var(--border-primary); }
+
+@media (max-width: 640px) {
+  .item { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+  .itemActions { justify-content: flex-start; }
+  .search input { width: 180px; }
+}
+
