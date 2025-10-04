@@ -31,9 +31,9 @@ export function NavBar() {
   const [isAuthed, setIsAuthed] = useState(false);
 
   useEffect(() => {
-    const update = () => setIsAuthed(!!(typeof window !== 'undefined' && localStorage.getItem('greenore_auth')));
+    const update = () => setIsAuthed(!!(typeof window !== 'undefined' && localStorage.getItem('jwt_token')));
     update();
-    const onStorage = (e: StorageEvent) => { if (e.key === 'greenore_auth') update(); };
+    const onStorage = (e: StorageEvent) => { if (e.key === 'jwt_token') update(); };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
   }, []);
@@ -103,7 +103,7 @@ export function NavBar() {
                       <FiSettings size={16} />
                       Settings
                     </Link>
-                    <button className={styles['navbar__user-item']} onClick={() => { localStorage.removeItem('greenore_auth'); setIsUserMenuOpen(false); setIsAuthed(false); router.push('/'); }}>
+                    <button className={styles['navbar__user-item']} onClick={() => { localStorage.removeItem('jwt_token'); setIsUserMenuOpen(false); setIsAuthed(false); router.push('/'); }}>
                       <FiLogOut size={16} />
                       Sign Out
                     </button>

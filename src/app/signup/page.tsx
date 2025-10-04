@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { authService, RegisterCredentials } from '@/services/auth.service';
 import styles from '../auth/auth.module.scss';
 
 export default function SignUpPage() {
@@ -11,15 +13,41 @@ export default function SignUpPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    setLoading(true);
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      setLoading(false);
       return;
     }
-    // TODO: Call backend register API with name, email, password
+
+    try {
+      const credentials: RegisterCredentials = {
+        name,
+        email,
+        password,
+        confirmPassword,
+      };
+
+      const result = await authService.register(credentials);
+      
+      if (result.success && result.data) {
+        // Redirect to dashboard on successful registration
+        router.push('/dashboard');
+      } else {
+        setError(result.error || 'Registration failed');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -28,24 +56,66 @@ export default function SignUpPage() {
         <h1 className={styles.title}>Create your account</h1>
         <p className={styles.sub}>Start your sustainable metals journey</p>
         <form className={styles.form} onSubmit={handleSubmit}>
+          {error && (
+            <div className={styles.error} style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>
+              {error}
+            </div>
+          )}
           <label className={styles.label}>
             Name
-            <input type="text" required placeholder="Jane Doe" className={styles.input} value={name} onChange={(e) => setName(e.target.value)} />
+            <input 
+              type="text" 
+              required 
+              placeholder="Jane Doe" 
+              className={styles.input} 
+              value={name} 
+              onChange={(e) => setName(e.target.value)}
+              disabled={loading}
+            />
           </label>
           <label className={styles.label}>
             Email
-            <input type="email" required placeholder="you@company.com" className={styles.input} value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input 
+              type="email" 
+              required 
+              placeholder="you@company.com" 
+              className={styles.input} 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+            />
           </label>
           <label className={styles.label}>
             Password
-            <input type="password" required placeholder="••••••••" className={styles.input} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input 
+              type="password" 
+              required 
+              placeholder="••••••••" 
+              className={styles.input} 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+            />
           </label>
           <label className={styles.label}>
             Confirm Password
-            <input type="password" required placeholder="••••••••" className={styles.input} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+            <input 
+              type="password" 
+              required 
+              placeholder="••••••••" 
+              className={styles.input} 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              disabled={loading}
+            />
           </label>
-          {error ? <div className={styles.error}>{error}</div> : null}
-          <button className={styles.primaryBtn} type="submit">Create account</button>
+          <button 
+            className={styles.primaryBtn} 
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? 'Creating account...' : 'Create account'}
+          </button>
         </form>
         <p className={styles.meta}>Already have an account? <Link href="/login" className={styles.link}>Sign in</Link></p>
         <Link href="/" className={styles.linkSmall}>← Back to landing</Link>
@@ -53,5 +123,3 @@ export default function SignUpPage() {
     </div>
   );
 }
-
-

@@ -19,10 +19,11 @@ import {
 } from 'react-icons/fi';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: FiHome },
+  { name: 'Dashboard', href: '/dashboard', icon: FiHome },
   { name: 'Scenarios', href: '/scenarios', icon: FiLayers },
-  { name: 'Compare', href: '/compare', icon: FiGitMerge },
+  { name: 'Projects', href: '/projects', icon: FiBarChart2 },
   { name: 'Reports', href: '/reports', icon: FiFileText },
+  { name: 'Compare', href: '/compare', icon: FiGitMerge },
   { name: 'Settings', href: '/settings', icon: FiSettings },
 ];
 
