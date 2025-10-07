@@ -227,7 +227,7 @@ function badge(delta: ReturnType<typeof useDelta>) {
   if (delta.pct === 0) return 'Equal';
   const pct = Math.round(delta.pct * 100);
   const cls = delta.better === 'left' ? 'badgeBetter' : 'badgeWorse';
-  return (<span className={(styles as any)[cls]}>{pct}% {delta.better} better</span>);
+  return (<span className={(styles as Record<string, string>)[cls]}>{pct}% {delta.better} better</span>);
 }
 
 function RadarChart({ left, right }: { left: MetalFactor | null; right: MetalFactor | null }) {
@@ -236,8 +236,8 @@ function RadarChart({ left, right }: { left: MetalFactor | null; right: MetalFac
     { key: 'energy_mj_per_kg', label: 'Energy' },
     { key: 'water_l_per_kg', label: 'Water' },
   ] as const;
-  const valuesL = metrics.map(m => (left ? (left as any)[m.key] as number : 0));
-  const valuesR = metrics.map(m => (right ? (right as any)[m.key] as number : 0));
+  const valuesL = metrics.map(m => (left ? left[m.key] as number : 0));
+  const valuesR = metrics.map(m => (right ? right[m.key] as number : 0));
   const max = Math.max(1, ...valuesL, ...valuesR);
   const norm = (v: number) => (v / max);
   const size = 280;

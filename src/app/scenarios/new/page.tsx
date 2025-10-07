@@ -186,10 +186,10 @@ export default function NewScenarioPage() {
       }
       const composition: Record<string, number> = {};
       materialComposition.forEach(r => { composition[r.element.trim()] = Number(r.fraction); });
-      const properties: Record<string, any> = {};
+      const properties: Record<string, unknown> = {};
       materialProperties.filter(p => p.key.trim()).forEach(p => { properties[p.key.trim()] = tryCoerce(p.value); });
 
-      const routeParams: Record<string, any> = {};
+      const routeParams: Record<string, unknown> = {};
       routeParameters.filter(p => p.key.trim()).forEach(p => { routeParams[p.key.trim()] = tryCoerce(p.value); });
 
       const payload: CreateScenarioDto = {
@@ -494,11 +494,11 @@ export default function NewScenarioPage() {
   );
 }
 
-function updateRow<T extends Record<string, any>>(setRows: (updater: (prev: T[]) => T[]) => void, rows: T[], index: number, changes: Partial<T>) {
+function updateRow<T extends Record<string, unknown>>(setRows: (updater: (prev: T[]) => T[]) => void, rows: T[], index: number, changes: Partial<T>) {
   setRows(prev => prev.map((r, i) => (i === index ? { ...r, ...changes } : r)));
 }
 
-function tryCoerce(value: string): any {
+function tryCoerce(value: string): unknown {
   const trimmed = value.trim();
   if (trimmed === '') return '';
   if (trimmed === 'true') return true;

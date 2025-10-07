@@ -3,12 +3,12 @@ import { apiService } from '@/utils/api';
 export interface MaterialConfig {
   type: string;
   composition: Record<string, number>;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
 }
 
 export interface RouteConfig {
   process: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   efficiency: number;
 }
 
