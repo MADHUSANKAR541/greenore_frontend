@@ -1,13 +1,32 @@
 import { apiService } from '@/utils/api';
 
+export interface MaterialConfig {
+  type: string;
+  composition: Record<string, number>;
+  properties: Record<string, any>;
+}
+
+export interface RouteConfig {
+  process: string;
+  parameters: Record<string, any>;
+  efficiency: number;
+}
+
+export interface EnergySource { type: string; percentage: number; carbonIntensity: number }
+export interface EnergyConfig { sources: EnergySource[]; renewable: number }
+
+export interface TransportConfig { distance: number; method: string; carbonIntensity: number }
+
+export interface EndOfLifeConfig { recyclingRate: number; disposalMethod: string; recoveryEfficiency: number }
+
 export interface ScenarioData {
   name: string;
   description?: string;
-  status?: string;
-  circularityScore: number;
-  carbonFootprint: number;
-  energyConsumption: number;
-  waterConsumption: number;
+  material: MaterialConfig;
+  route: RouteConfig;
+  energy: EnergyConfig;
+  transport: TransportConfig;
+  endOfLife: EndOfLifeConfig;
   tags?: string[];
 }
 
@@ -16,6 +35,11 @@ export interface Scenario extends ScenarioData {
   createdAt: Date;
   updatedAt: Date;
   lastRunAt?: Date;
+  // The backend entity contains computed metrics; they are not part of Create DTO
+  circularityScore?: number;
+  carbonFootprint?: number;
+  energyConsumption?: number;
+  waterConsumption?: number;
 }
 
 export type CreateScenarioDto = ScenarioData;

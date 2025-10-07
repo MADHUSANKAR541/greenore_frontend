@@ -18,9 +18,10 @@ interface Scenario {
 interface ScenarioCardProps {
   scenario: Scenario;
   viewMode: 'grid' | 'list';
+  isNew?: boolean;
 }
 
-export function ScenarioCard({ scenario, viewMode }: ScenarioCardProps) {
+export function ScenarioCard({ scenario, viewMode, isNew }: ScenarioCardProps) {
   const statusColors = {
     completed: 'green',
     running: 'orange',
@@ -37,7 +38,7 @@ export function ScenarioCard({ scenario, viewMode }: ScenarioCardProps) {
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className={`${styles.card} ${styles[`card--${viewMode}`]}`}
+      className={`${styles.card} ${styles[`card--${viewMode}`]} ${isNew ? styles['card--new'] : ''}`}
     >
       <div className={styles.card__header}>
         <div className={styles.card__title}>
@@ -45,6 +46,7 @@ export function ScenarioCard({ scenario, viewMode }: ScenarioCardProps) {
           <span className={`${styles.card__status} ${styles[`card__status--${scenario.status}`]}`}>
             {statusLabels[scenario.status]}
           </span>
+          {isNew && <span className={styles.card__new}>New</span>}
         </div>
         <button className={styles.card__menu}>
           <FiMoreVertical size={16} />
