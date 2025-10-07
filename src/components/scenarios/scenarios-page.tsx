@@ -7,7 +7,18 @@ import { ScenarioCard } from './scenario-card';
 import { ScenarioWizard } from './scenario-wizard';
 import styles from './scenarios-page.module.scss';
 
-const mockScenarios = [
+type ScenarioStatus = 'completed' | 'running' | 'draft';
+type ScenarioItem = {
+  id: string;
+  name: string;
+  description: string;
+  status: ScenarioStatus;
+  circularityScore: number;
+  lastModified: string;
+  tags: string[];
+};
+
+const mockScenarios: ScenarioItem[] = [
   {
     id: '1',
     name: 'Steel Production Optimization',

@@ -47,14 +47,14 @@ export default function Settings() {
             <form onSubmit={savePrefs} className={styles.form}>
               <label>
                 <span>Units</span>
-                <select value={units} onChange={(e) => setUnits(e.target.value as any)}>
+                <select value={units} onChange={(e) => setUnits(e.target.value as 'metric' | 'imperial')}>
                   <option value="metric">Metric (kg, MJ, L)</option>
                   <option value="imperial">Imperial (lb, BTU, gal)</option>
                 </select>
               </label>
               <label>
                 <span>Theme</span>
-                <select value={theme} onChange={(e) => setTheme(e.target.value as any)}>
+                <select value={theme} onChange={(e) => setTheme(e.target.value as 'system' | 'light' | 'dark')}>
                   <option value="system">System</option>
                   <option value="light">Light</option>
                   <option value="dark">Dark</option>

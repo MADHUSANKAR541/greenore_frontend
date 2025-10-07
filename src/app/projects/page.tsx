@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { projectsService } from '@/services/projects.service';
-import styles from './projects.module.scss';
+import { projectsService, type Project } from '@/services/projects.service';
+import styles from './page.module.scss';
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -108,12 +108,28 @@ export default function ProjectsPage() {
                 </button>
               </div>
             ) : (
-              projects.map((project, index) => (
-                <div key={index} className={styles.projectCard}>
-                  <h3>Project {index + 1}</h3>
-                  <p>Project data: {JSON.stringify(project)}</p>
-                </div>
-              ))
+              projects.map((project, index) => {
+                const name = project.name ?? `Project ${index + 1}`;
+                const status = project.status ?? 'Unknown';
+                const owner = '—';
+                const createdAt = project.createdAt ? new Date(project.createdAt).toLocaleDateString() : '—';
+                const description = project.description || '';
+                return (
+                  <div key={index} className={styles.projectCard}>
+                    <h3>{name}</h3>
+                    {description && <p>{description}</p>}
+                    <div className={styles.meta}>
+                      <span><strong>Status:</strong> {status}</span>
+                      <span><strong>Owner:</strong> {owner}</span>
+                      <span><strong>Created:</strong> {createdAt}</span>
+                    </div>
+                    <details>
+                      <summary>Details</summary>
+                      <pre className={styles.codeBlock}>{JSON.stringify(project, null, 2)}</pre>
+                    </details>
+                  </div>
+                );
+              })
             )}
           </div>
         </div>

@@ -18,8 +18,8 @@ export interface Scenario extends ScenarioData {
   lastRunAt?: Date;
 }
 
-export interface CreateScenarioDto extends ScenarioData {}
-export interface UpdateScenarioDto extends Partial<ScenarioData> {}
+export type CreateScenarioDto = ScenarioData;
+export type UpdateScenarioDto = Partial<ScenarioData>;
 
 export interface ScenarioResponse {
   scenarios: Scenario[];
@@ -36,7 +36,7 @@ export interface ScenarioAnalysisResponse {
 export interface ScenarioStatusResponse {
   status: string;
   progress: number;
-  results?: any;
+  results?: unknown;
 }
 
 class ScenariosService {

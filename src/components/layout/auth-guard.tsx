@@ -26,7 +26,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
     // For testing: Show loader for 5 seconds
     setTimeout(() => {
       setIsChecking(false);
-    }, 5000);
+    }, 1000);
 
     // Check if user is authenticated
     const checkAuth = async () => {
