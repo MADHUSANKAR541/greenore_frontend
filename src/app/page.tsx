@@ -5,6 +5,7 @@ import { motion, useMotionValue, useTransform } from 'framer-motion';
 import styles from './page.module.scss';
 import { FiArrowRight, FiCheckCircle, FiBarChart2, FiZap, FiFileText, FiGlobe, FiShuffle } from 'react-icons/fi';
 import { DashboardMock } from '@/components/landing/dashboard-mock';
+import { useEffect } from 'react';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -12,6 +13,17 @@ const fadeUp = {
 };
 
 export default function Home() {
+  useEffect(() => {
+    // Ping backend health on every visit to keep Render dyno warm
+    fetch('https://greenore-backend.onrender.com/api/health', {
+      method: 'GET',
+      cache: 'no-store',
+      keepalive: true,
+    }).catch(() => {
+      // Intentionally ignore errors; purpose is just to wake the server
+    });
+  }, []);
+
   // Interactive tilt for orb
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
