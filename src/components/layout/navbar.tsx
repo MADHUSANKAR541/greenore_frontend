@@ -16,7 +16,6 @@ import {
   FiChevronDown
 } from 'react-icons/fi';
 import { usePathname, useRouter } from 'next/navigation';
-import { authService } from '@/services/auth.service';
 
 // Sidebar handles navigation; keep navbar minimal (brand + actions)
 const navigation: never[] = [];
@@ -30,16 +29,11 @@ export function NavBar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isAuthed, setIsAuthed] = useState(false);
-  const [isGuest, setIsGuest] = useState(false);
 
   useEffect(() => {
-    const update = () => {
-      const hasToken = !!(typeof window !== 'undefined' && localStorage.getItem('jwt_token'));
-      setIsAuthed(hasToken);
-      setIsGuest(authService.isGuest());
-    };
+    const update = () => setIsAuthed(!!(typeof window !== 'undefined' && localStorage.getItem('jwt_token')));
     update();
-    const onStorage = (e: StorageEvent) => { if (e.key === 'jwt_token' || e.key === 'guest_mode') update(); };
+    const onStorage = (e: StorageEvent) => { if (e.key === 'jwt_token') update(); };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
   }, []);
@@ -51,11 +45,6 @@ export function NavBar() {
   return (
     <nav className={styles.navbar}>
       <div className={styles['navbar__container']}>
-        {isGuest && (
-          <div className={styles['navbar__guest-banner']}>
-            You’re accessing GreenOre in Guest Evaluator Mode. Data will not be saved after session ends.
-          </div>
-        )}
         {/* Logo */}
         <div className={styles['navbar__brand']}>
           <Link href="/" className={styles['navbar__logo']}>

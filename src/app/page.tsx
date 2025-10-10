@@ -13,7 +13,6 @@ import {
   FiShuffle,
 } from "react-icons/fi";
 import { DashboardMock } from "@/components/landing/dashboard-mock";
-import { useEffect } from "react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -37,11 +36,6 @@ export default function Home() {
   const my = useMotionValue(0);
   const rotateY = useTransform(mx, [-120, 120], [-12, 12]);
   const rotateX = useTransform(my, [-120, 120], [12, -12]);
-  const [showGuestModal, setShowGuestModal] = useState(false);
-  const [guestLoading, setGuestLoading] = useState(false);
-  const [guestError, setGuestError] = useState<string | null>(null);
-  const router = useRouter();
-  const { loginGuest } = useAuth();
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();

@@ -13,19 +13,6 @@
   // Keep it above other content layers
   z-index: var(--z-fixed);
 
-  &__guest-banner {
-    position: absolute;
-    top: -28px;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15));
-    color: var(--text-secondary);
-    font-size: 12px;
-    padding: 6px 16px;
-    text-align: center;
-    border-bottom: 1px dashed var(--border-primary);
-  }
-
 
   &__container {
     display: flex;
