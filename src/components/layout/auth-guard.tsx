@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { authService } from '@/services/auth.service';
-import PlanetLoader from './PlanetLoader';
+import { useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { authService } from "@/services/auth.service";
+import PlanetLoader from "./PlanetLoader";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -15,7 +15,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const [isChecking, setIsChecking] = useState(true);
 
   // Routes that don't require authentication
-  const publicRoutes = ['/', '/login', '/signup'];
+  const publicRoutes = ["/", "/login", "/signup"];
   const isPublicRoute = publicRoutes.includes(pathname);
 
   useEffect(() => {
@@ -41,12 +41,12 @@ export function AuthGuard({ children }: AuthGuardProps) {
           }
         } catch (error) {
           // Token is invalid
-          console.error('Authentication check failed:', error);
+          console.error("Authentication check failed:", error);
         }
       }
 
       // Redirect to login if not authenticated
-      router.push('/login');
+      router.push("/login");
     };
 
     checkAuth();

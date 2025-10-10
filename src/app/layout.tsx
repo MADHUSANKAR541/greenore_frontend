@@ -16,12 +16,21 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "GreenOre — AI-powered Circularity & LCA Platform",
-  description: "Advanced LCA and circularity analysis platform for metals with AI-powered optimization and reporting",
-  keywords: ["LCA", "circularity", "metals", "sustainability", "AI", "optimization"],
+  description:
+    "Advanced LCA and circularity analysis platform for metals with AI-powered optimization and reporting",
+  keywords: [
+    "LCA",
+    "circularity",
+    "metals",
+    "sustainability",
+    "AI",
+    "optimization",
+  ],
   authors: [{ name: "GreenOre Team" }],
   openGraph: {
     title: "GreenOre — AI-powered Circularity & LCA Platform",
-    description: "Advanced LCA and circularity analysis platform for metals with AI-powered optimization and reporting",
+    description:
+      "Advanced LCA and circularity analysis platform for metals with AI-powered optimization and reporting",
     type: "website",
   },
 };
@@ -35,9 +44,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider>
-          <LayoutSelector>
-            {children}
-          </LayoutSelector>
+          <LayoutSelector>{children}</LayoutSelector>
         </ThemeProvider>
       </body>
     </html>

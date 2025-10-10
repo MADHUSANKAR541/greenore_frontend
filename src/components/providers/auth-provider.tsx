@@ -1,14 +1,19 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { authService, User } from '@/services/auth.service';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { authService, User } from "@/services/auth.service";
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  register: (name: string, email: string, password: string, confirmPassword: string) => Promise<boolean>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => Promise<boolean>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -25,10 +30,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const checkAuthStatus = async () => {
-    if (typeof window === 'undefined') return;
-    
+    if (typeof window === "undefined") return;
+
     setIsLoading(true);
-    
+
     if (authService.isLoggedIn()) {
       try {
         const result = await authService.getProfile();
@@ -44,20 +49,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } else {
       setIsAuthenticated(false);
     }
-    
+
     setIsLoading(false);
   };
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
       const result = await authService.login({ email, password });
-      
+
       if (result.success && result.data) {
         setUser(result.data.user);
         setIsAuthenticated(true);
         return true;
       }
-      
+
       return false;
     } catch (error) {
       return false;
@@ -65,20 +70,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const register = async (
-    name: string, 
-    email: string, 
-    password: string, 
+    name: string,
+    email: string,
+    password: string,
     confirmPassword: string
   ): Promise<boolean> => {
     try {
-      const result = await authService.register({ name, email, password, confirmPassword });
-      
+      const result = await authService.register({
+        name,
+        email,
+        password,
+        confirmPassword,
+      });
+
       if (result.success && result.data) {
         setUser(result.data.user);
         setIsAuthenticated(true);
         return true;
       }
-      
+
       return false;
     } catch (error) {
       return false;
@@ -93,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshUser = async () => {
     if (!isAuthenticated) return;
-    
+
     try {
       const result = await authService.getProfile();
       if (result.success && result.data) {
@@ -120,7 +130,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }

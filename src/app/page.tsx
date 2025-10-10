@@ -13,6 +13,7 @@ import {
   FiShuffle,
 } from "react-icons/fi";
 import { DashboardMock } from "@/components/landing/dashboard-mock";
+import { useEffect } from "react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
