@@ -1,5 +1,5 @@
 // API Configuration and utilities
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const API_BASE_URL = 'https://greenore-backend.onrender.com';
 
 export interface ApiResponse<T> {
   data?: T;
@@ -74,14 +74,14 @@ class ApiService {
     return this.request<T>(endpoint, { method: 'GET' });
   }
 
-  async post<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+  async post<T>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'POST',
       body: data ? JSON.stringify(data) : undefined,
     });
   }
 
-  async put<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+  async put<T>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'PUT',
       body: data ? JSON.stringify(data) : undefined,
@@ -92,7 +92,7 @@ class ApiService {
     return this.request<T>(endpoint, { method: 'DELETE' });
   }
 
-  async patch<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+  async patch<T>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,

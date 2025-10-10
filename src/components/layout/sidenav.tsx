@@ -15,13 +15,17 @@ import {
   FiChevronRight,
   FiPlus,
   FiTrendingUp,
-  FiBarChart2
+  FiBarChart2,
+  FiCpu,
+  FiActivity
 } from 'react-icons/fi';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: FiHome },
   { name: 'Scenarios', href: '/scenarios', icon: FiLayers },
   { name: 'Projects', href: '/projects', icon: FiBarChart2 },
+  { name: 'ML Analysis', href: '/ml', icon: FiCpu },
+  { name: 'Batch ML', href: '/ml/batch', icon: FiActivity },
   { name: 'Reports', href: '/reports', icon: FiFileText },
   { name: 'Compare', href: '/compare', icon: FiGitMerge },
   { name: 'Settings', href: '/settings', icon: FiSettings },

@@ -15,13 +15,13 @@ export interface Project extends ProjectData {
   updatedAt: Date;
 }
 
-export interface CreateProjectDto extends ProjectData {}
-export interface UpdateProjectDto extends Partial<ProjectData> {}
+export type CreateProjectDto = ProjectData;
+export type UpdateProjectDto = Partial<ProjectData>;
 
 class ProjectsService {
-  async getProjects(): Promise<{ success: boolean; data?: any[]; error?: string }> {
+  async getProjects(): Promise<{ success: boolean; data?: Project[]; error?: string }> {
     try {
-      const response = await apiService.get('/projects');
+      const response = await apiService.get<Project[]>('/projects');
       
       if (response.error) {
         return { success: false, error: response.error };
@@ -37,9 +37,9 @@ class ProjectsService {
     }
   }
 
-  async getProject(id: number): Promise<{ success: boolean; data?: any; error?: string }> {
+  async getProject(id: number): Promise<{ success: boolean; data?: Project; error?: string }> {
     try {
-      const response = await apiService.get(`/projects/${id}`);
+      const response = await apiService.get<Project>(`/projects/${id}`);
       
       if (response.error) {
         return { success: false, error: response.error };
@@ -54,9 +54,9 @@ class ProjectsService {
     }
   }
 
-  async createProject(data: CreateProjectDto): Promise<{ success: boolean; data?: any; error?: string }> {
+  async createProject(data: CreateProjectDto): Promise<{ success: boolean; data?: Project; error?: string }> {
     try {
-      const response = await apiService.post('/projects', data);
+      const response = await apiService.post<Project>('/projects', data);
       
       if (response.error) {
         return { success: false, error: response.error };
@@ -71,9 +71,9 @@ class ProjectsService {
     }
   }
 
-  async updateProject(id: number, data: UpdateProjectDto): Promise<{ success: boolean; data?: any; error?: string }> {
+  async updateProject(id: number, data: UpdateProjectDto): Promise<{ success: boolean; data?: Project; error?: string }> {
     try {
-      const response = await apiService.put(`/projects/${id}`, data);
+      const response = await apiService.put<Project>(`/projects/${id}`, data);
       
       if (response.error) {
         return { success: false, error: response.error };

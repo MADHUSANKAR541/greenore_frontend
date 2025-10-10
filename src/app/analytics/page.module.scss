@@ -1,0 +1,9 @@
+.page { width: 100%; min-height: calc(100vh - 4rem); background: var(--bg-primary); transition: background-color var(--transition-normal); }
+.content { padding: var(--space-8); max-width: 6xl; margin: 0 auto; }
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--space-4); }
+.kpi { background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-xl); padding: var(--space-5); }
+.kpiLabel { color: var(--text-secondary); font-size: var(--text-sm); }
+.kpiValue { color: var(--text-primary); font-weight: 800; font-size: var(--text-2xl); }
+.card { background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-xl); padding: var(--space-5); }
+@media (max-width: 900px) { .kpis { grid-template-columns: 1fr; } }
+

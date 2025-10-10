@@ -1,13 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiPlus, FiSearch, FiFilter, FiGrid, FiList } from 'react-icons/fi';
 import { ScenarioCard } from './scenario-card';
-import { ScenarioWizard } from './scenario-wizard';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import styles from './scenarios-page.module.scss';
 
-const mockScenarios = [
+type ScenarioStatus = 'completed' | 'running' | 'draft';
+type ScenarioItem = {
+  id: string;
+  name: string;
+  description: string;
+  status: ScenarioStatus;
+  circularityScore: number;
+  lastModified: string;
+  tags: string[];
+};
+
+const mockScenarios: ScenarioItem[] = [
   {
     id: '1',
     name: 'Steel Production Optimization',
@@ -47,9 +59,11 @@ const mockScenarios = [
 ];
 
 export function ScenariosPage() {
+  const searchParams = useSearchParams();
+  const newId = useMemo(() => searchParams?.get('newId') || null, [searchParams]);
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [showWizard, setShowWizard] = useState(false);
+  
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
   const filteredScenarios = mockScenarios.filter(scenario => {
@@ -69,13 +83,10 @@ export function ScenariosPage() {
             Manage and analyze your LCA scenarios
           </p>
         </div>
-        <button 
-          onClick={() => setShowWizard(true)}
-          className={styles.scenarios__create}
-        >
+        <Link href="/scenarios/new" className={styles.scenarios__create}>
           <FiPlus size={20} />
           New Scenario
-        </button>
+        </Link>
       </div>
 
       {/* Filters and Search */}
@@ -129,7 +140,7 @@ export function ScenariosPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
           >
-            <ScenarioCard scenario={scenario} viewMode={viewMode} />
+            <ScenarioCard scenario={scenario} viewMode={viewMode} isNew={newId === scenario.id} />
           </motion.div>
         ))}
       </div>
@@ -144,27 +155,15 @@ export function ScenariosPage() {
           <div className={styles['scenarios__empty-content']}>
             <h3>No scenarios found</h3>
             <p>Try adjusting your search or create a new scenario</p>
-            <button 
-              onClick={() => setShowWizard(true)}
-              className={styles['scenarios__empty-action']}
-            >
+            <Link href="/scenarios/new" className={styles['scenarios__empty-action']}>
               <FiPlus size={16} />
               Create First Scenario
-            </button>
+            </Link>
           </div>
         </motion.div>
       )}
 
-      {/* Scenario Wizard Modal */}
-      {showWizard && (
-        <ScenarioWizard 
-          onClose={() => setShowWizard(false)}
-          onComplete={() => {
-            setShowWizard(false);
-            // Handle scenario creation completion
-          }}
-        />
-      )}
+      
     </div>
   );
 }
