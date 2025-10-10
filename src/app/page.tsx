@@ -1,10 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import styles from './page.module.scss';
 import { FiArrowRight, FiCheckCircle, FiBarChart2, FiZap, FiFileText, FiGlobe, FiShuffle } from 'react-icons/fi';
 import { DashboardMock } from '@/components/landing/dashboard-mock';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/providers/auth-provider';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -17,6 +20,11 @@ export default function Home() {
   const my = useMotionValue(0);
   const rotateY = useTransform(mx, [-120, 120], [-12, 12]);
   const rotateX = useTransform(my, [-120, 120], [12, -12]);
+  const [showGuestModal, setShowGuestModal] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
+  const [guestError, setGuestError] = useState<string | null>(null);
+  const router = useRouter();
+  const { loginGuest } = useAuth();
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -25,6 +33,23 @@ export default function Home() {
   };
 
   const onLeave = () => { mx.set(0); my.set(0); };
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowGuestModal(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleGuestLogin = async () => {
+    setGuestError(null);
+    setGuestLoading(true);
+    const ok = await loginGuest();
+    setGuestLoading(false);
+    if (ok) {
+      router.push('/dashboard');
+    } else {
+      setGuestError('Guest login failed. Please try again.');
+    }
+  };
   return (
     <div className={styles.page}>
       {/* Hero */}
@@ -41,6 +66,7 @@ export default function Home() {
               <Link href="/login" className={styles.ctaPrimary}>
                 Login <FiArrowRight size={16} />
               </Link>
+              <button className={styles.ctaSecondary} onClick={() => setShowGuestModal(true)}>Guest Access</button>
             </motion.div>
           </div>
           <div className={styles.heroMock} aria-hidden onMouseMove={onMove} onMouseLeave={onLeave}>
@@ -57,6 +83,26 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <AnimatePresence>
+        {showGuestModal && (
+          <motion.div className={styles.modalBackdrop} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.div className={styles.modal} initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 20, opacity: 0 }}>
+              <h3>Guest Access</h3>
+              <p>✨ Welcome, SIH Evaluator</p>
+              <p>We know your time is valuable, and you have many teams to review.</p>
+              <p>A quick guest access has been provided so you can immediately explore Optimetro's features — no sign-up required!</p>
+              {guestError ? <p style={{ color: 'var(--error)', marginTop: 4 }}>{guestError}</p> : null}
+              <div className={styles.modalActions}>
+                <button className={styles.ctaPrimary} onClick={handleGuestLogin} disabled={guestLoading}>
+                  {guestLoading ? 'Starting...' : 'Evaluator login'}
+                </button>
+                <button className={styles.ctaTertiary} onClick={() => setShowGuestModal(false)}>Close</button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Why */}
       <section className={styles.why}>

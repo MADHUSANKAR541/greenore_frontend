@@ -30,6 +30,12 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
     // Check if user is authenticated
     const checkAuth = async () => {
+      if (authService.isGuest()) {
+        // Guest sessions are allowed; skip remote validation
+        setIsChecking(false);
+        return;
+      }
+
       if (authService.isLoggedIn()) {
         try {
           // Validate token by calling profile endpoint

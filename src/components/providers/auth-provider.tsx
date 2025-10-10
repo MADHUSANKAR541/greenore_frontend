@@ -11,6 +11,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string, confirmPassword: string) => Promise<boolean>;
   logout: () => void;
   refreshUser: () => Promise<void>;
+  loginGuest: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -29,6 +30,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     setIsLoading(true);
     
+    if (authService.isGuest()) {
+      const guest = authService.getGuestUser();
+      if (guest) {
+        setUser(guest);
+        setIsAuthenticated(true);
+        setIsLoading(false);
+        return;
+      }
+    }
+
     if (authService.isLoggedIn()) {
       try {
         const result = await authService.getProfile();
@@ -94,6 +105,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const refreshUser = async () => {
     if (!isAuthenticated) return;
     
+    if (authService.isGuest()) {
+      // In guest mode, keep local user; no remote profile
+      const guest = authService.getGuestUser();
+      if (guest) setUser(guest);
+      return;
+    }
+
     try {
       const result = await authService.getProfile();
       if (result.success && result.data) {
@@ -101,6 +119,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       logout();
+    }
+  };
+
+  const loginGuest = async (): Promise<boolean> => {
+    try {
+      const result = await authService.guestLogin();
+      if (result.success && result.data) {
+        setUser(result.data.user);
+        setIsAuthenticated(true);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
     }
   };
 
@@ -112,6 +144,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     register,
     logout,
     refreshUser,
+    loginGuest,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
