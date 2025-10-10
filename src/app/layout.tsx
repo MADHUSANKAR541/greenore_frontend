@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { AuthProvider } from "@/components/providers/auth-provider";
 import { LayoutSelector } from "@/components/layout/layout-selector";
 import "./globals.scss";
 
@@ -44,7 +45,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider>
-          <LayoutSelector>{children}</LayoutSelector>
+          <AuthProvider>
+            <LayoutSelector>{children}</LayoutSelector>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

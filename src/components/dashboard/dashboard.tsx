@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { circIn, motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { 
   FiTrendingUp, 
@@ -19,6 +19,7 @@ import { RecentScenarios } from '@/components/dashboard/recent-scenarios';
 import { QuickActions } from '@/components/dashboard/quick-actions';
 import { CircularityRadar } from '@/components/dashboard/circularity-radar';
 import styles from './dashboard.module.scss';
+import { useRouter } from 'next/navigation';
 
 interface KpiCardData {
   title: string;
@@ -28,6 +29,7 @@ interface KpiCardData {
   icon: IconType;
   color: 'blue' | 'green' | 'emerald' | 'purple' | 'orange' | 'red';
 }
+
 
 const kpiData: KpiCardData[] = [
   {
@@ -65,6 +67,7 @@ const kpiData: KpiCardData[] = [
 ];
 
 export function Dashboard() {
+  const router = useRouter();
   const [heroRef, heroInView] = useInView({
     threshold: 0.1,
     triggerOnce: true
@@ -108,7 +111,7 @@ export function Dashboard() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className={styles.hero__actions}
           >
-            <button className={styles.hero__primary}>
+            <button className={styles.hero__primary} onClick={() => router.push('/scenarios/new')}>
               <FiPlus size={20} />
               New Scenario
             </button>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import styles from "./page.module.scss";
 import {
   FiArrowRight,
@@ -11,9 +11,12 @@ import {
   FiFileText,
   FiGlobe,
   FiShuffle,
+  FiX,
 } from "react-icons/fi";
 import { DashboardMock } from "@/components/landing/dashboard-mock";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/providers/auth-provider";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -21,6 +24,11 @@ const fadeUp = {
 };
 
 export default function Home() {
+  const router = useRouter();
+  const { loginGuest } = useAuth();
+  const [showGuestModal, setShowGuestModal] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
+  const [guestError, setGuestError] = useState<string | null>(null);
   useEffect(() => {
     // Ping backend health on every visit to keep Render dyno warm
     fetch("https://greenore-backend.onrender.com/api/health", {
@@ -30,6 +38,8 @@ export default function Home() {
     }).catch(() => {
       // Intentionally ignore errors; purpose is just to wake the server
     });
+    const t = setTimeout(() => setShowGuestModal(true), 2000);
+    return () => clearTimeout(t);
   }, []);
 
   // Interactive tilt for orb
@@ -47,6 +57,18 @@ export default function Home() {
   const onLeave = () => {
     mx.set(0);
     my.set(0);
+  };
+
+  const handleGuestLogin = async () => {
+    setGuestError(null);
+    setGuestLoading(true);
+    const ok = await loginGuest();
+    setGuestLoading(false);
+    if (ok) {
+      router.push('/dashboard');
+    } else {
+      setGuestError('Guest login failed. Please try again.');
+    }
   };
   return (
     <div className={styles.page}>
@@ -79,8 +101,11 @@ export default function Home() {
               transition={{ duration: 0.7 }}
               className={styles.ctaRow}
             >
-              <Link href="/login" className={styles.ctaPrimary}>
-                Login <FiArrowRight size={16} />
+              <button className={styles.ctaPrimary} onClick={() => setShowGuestModal(true)}>
+                Guest Access <FiArrowRight size={16} />
+              </button>
+              <Link href="/login" className={styles.ctaSecondary}>
+                Login
               </Link>
             </motion.div>
           </div>
@@ -118,6 +143,34 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <AnimatePresence>
+        {showGuestModal && (
+          <motion.div className={styles.modalBackdrop} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.div className={styles.modal} initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 20, opacity: 0 }}>
+              <button className={styles.modalClose} aria-label="Close" onClick={() => setShowGuestModal(false)}>
+                <FiX size={18} />
+              </button>
+              <h3>Guest Access</h3>
+              <p>✨ Welcome, SIH Evaluator</p>
+              <p>We know your time is valuable, and you have many teams to review.</p>
+              <p>A quick guest access has been provided so you can immediately explore Optimetro's features with no sign-up required!</p>
+              {guestError ? <p style={{ color: 'var(--error)', marginTop: 4 }}>{guestError}</p> : null}
+              <div className={styles.modalActions}>
+                <button className={styles.ctaPrimary} onClick={handleGuestLogin} disabled={guestLoading}>
+                  {guestLoading ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      <span className={styles.spinner} aria-hidden /> Starting...
+                    </span>
+                  ) : (
+                    'Guest Login'
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Why */}
       <section className={styles.why}>
