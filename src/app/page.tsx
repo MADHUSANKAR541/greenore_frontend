@@ -154,7 +154,7 @@ export default function Home() {
               <h3>Guest Access</h3>
               <p>✨ Welcome, SIH Evaluator</p>
               <p>We know your time is valuable, and you have many teams to review.</p>
-              <p>A quick guest access has been provided so you can immediately explore Optimetro's features with no sign-up required!</p>
+              <p>A quick guest access has been provided so you can immediately explore Optimetro&apos;s features with no sign-up required!</p>
               {guestError ? <p style={{ color: 'var(--error)', marginTop: 4 }}>{guestError}</p> : null}
               <div className={styles.modalActions}>
                 <button className={styles.ctaPrimary} onClick={handleGuestLogin} disabled={guestLoading}>
