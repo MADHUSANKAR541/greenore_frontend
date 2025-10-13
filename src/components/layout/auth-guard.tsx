@@ -24,13 +24,18 @@ export function AuthGuard({ children }: AuthGuardProps) {
       return;
     }
 
-    // For testing: Show loader for 5 seconds
-    setTimeout(() => {
+    // Short loader to avoid flash while checking
+    const t = setTimeout(() => {
       setIsChecking(false);
-    }, 1000);
+    }, 600);
 
     // Check if user is authenticated
     const checkAuth = async () => {
+      if (authService.isGuest()) {
+        // Guest sessions bypass auth entirely
+        setIsChecking(false);
+        return;
+      }
       if (authService.isLoggedIn()) {
         try {
           // Validate token by calling profile endpoint
@@ -50,6 +55,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
     };
 
     checkAuth();
+    return () => clearTimeout(t);
   }, [pathname, router, isPublicRoute]);
 
   // Show loading animation while checking authentication
